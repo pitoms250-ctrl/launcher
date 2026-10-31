@@ -52,7 +52,7 @@ namespace Launcher.UI {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/FLauncher;component/app.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/FLauncher;V1.0.0.0;component/app.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\App.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

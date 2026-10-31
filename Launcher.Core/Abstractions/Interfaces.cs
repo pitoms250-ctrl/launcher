@@ -70,6 +70,8 @@ public interface IRealtimeDatabaseService
     Task RegisterPlayerAsync(AuthSession session, string nickname, string locale, int launchCount = 0,
         double totalPlayMinutes = 0, string? lastVersion = null, CancellationToken ct = default);
     Task<bool> IsPlayerBannedAsync(AuthSession session, CancellationToken ct = default);
+    /// <summary>Живая подписка (SSE) на bans/{uid}: сразу присылает текущее состояние и затем каждое изменение из CRM. Бросает исключение при обрыве — вызывающий переподключается.</summary>
+    Task WatchBanAsync(AuthSession session, Action<bool, string?> onChanged, CancellationToken ct = default);
     Task SetPresenceAsync(AuthSession session, string state, string launcherVersion, string? gameVersion = null, CancellationToken ct = default);
     Task RecordEventAsync(AuthSession session, string eventType, string area, string locale, string launcherVersion,
         string? gameVersion = null, CancellationToken ct = default);

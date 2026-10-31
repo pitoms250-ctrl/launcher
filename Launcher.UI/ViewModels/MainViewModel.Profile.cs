@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
@@ -80,12 +81,35 @@ public partial class MainViewModel
     }
 
     // ---------- скин для главного экрана ----------
+    private int _skinLoadVersion;
+    private bool _lobbySkinCustom;                      // пользователь менял скин во вкладке «Скины» — не затираем его скачанным
+    private readonly DispatcherTimer _skinApplyTimer = new() { Interval = TimeSpan.FromMilliseconds(250) };
+
+    /// <summary>Скин из редактора → лобби. Дебаунс, чтобы 3D-модель не пересобиралась на каждый мазок.</summary>
+    private void InitSkinSync()
+    {
+        _skinApplyTimer.Tick += (_, _) =>
+        {
+            _skinApplyTimer.Stop();
+            try { PlayerSkin = SkinEditor.ToBitmapSource(); }
+            catch (Exception ex) { _log.LogWarning(ex, "Не удалось применить скин из редактора к лобби"); }
+        };
+        SkinEditor.SkinChanged += () =>
+        {
+            _lobbySkinCustom = true;
+            _skinApplyTimer.Stop();
+            _skinApplyTimer.Start();
+        };
+    }
+
     private async Task LoadPlayerSkinAsync()
     {
         try
         {
+            var version = ++_skinLoadVersion;
             var name = _session?.Username ?? Nickname;
             var png = string.IsNullOrWhiteSpace(name) ? null : await _skins.DownloadByNickAsync(name.Trim());
+            if (version != _skinLoadVersion || _lobbySkinCustom) return;   // устаревший ответ или скин уже изменён вручную
             if (png is { Length: > 0 }) PlayerSkin = ToBitmap(png);
             var skin = PlayerSkin;
             Log.Information("LobbySkin: texture loaded. Source={Source}, Width={Width}, Height={Height}",

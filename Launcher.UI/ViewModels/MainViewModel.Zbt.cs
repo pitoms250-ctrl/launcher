@@ -13,10 +13,18 @@ public partial class MainViewModel
     {
         try
         {
-            _zbtSession = await _auth.GetOrCreateFirebaseGuestSessionAsync();
-            var identity = _session is null
-                ? _zbtSession with { Username = Nickname }
-                : _zbtSession with { Username = _session.Username, Uuid = _session.Uuid, Email = _session.Email };
+            AuthSession identity;
+            if (HasFirebaseSession(_session))
+            {
+                // ключ активируется под Firebase-uid аккаунта Microsoft — проверяем тем же uid
+                _session = await _auth.RefreshFirebaseTokenAsync(_session!);
+                identity = _session;
+            }
+            else
+            {
+                _zbtSession = await _auth.GetOrCreateFirebaseGuestSessionAsync();
+                identity = _zbtSession with { Username = Nickname };
+            }
             var access = await _realtimeDatabase.CheckZbtAccessAsync(identity, _settings.InstallId!);
             IsZbtLocked = !access.Ok;
             ZbtMessage = access.Message;

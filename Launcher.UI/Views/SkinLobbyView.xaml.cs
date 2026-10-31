@@ -205,7 +205,7 @@ public partial class SkinLobbyView : UserControl
         var texture = new CroppedBitmap(skin, crop);
         if (skipTransparent && IsFullyTransparent(texture)) return;
 
-        var brush = new ImageBrush(texture)
+        var brush = new ImageBrush(UpscaleNearest(texture, 16))
         {
             Stretch = Stretch.Fill,
             TileMode = TileMode.None,
@@ -223,6 +223,28 @@ public partial class SkinLobbyView : UserControl
         };
         var material = new DiffuseMaterial(brush);
         root.Children.Add(new GeometryModel3D(mesh, material) { BackMaterial = material });
+    }
+
+    /// <summary>
+    /// Грани скина — всего 4×4…8×8 пикселей; в 3D при растяжении на сотни пикселей они размываются сглаживанием.
+    /// Увеличиваем грань целыми блоками заранее — тогда пиксели остаются резкими квадратами.
+    /// </summary>
+    private static BitmapSource UpscaleNearest(BitmapSource source, int factor)
+    {
+        var converted = new FormatConvertedBitmap(source, PixelFormats.Bgra32, null, 0);
+        int w = converted.PixelWidth, h = converted.PixelHeight;
+        var src = new byte[w * h * 4];
+        converted.CopyPixels(src, w * 4, 0);
+
+        int bigW = w * factor, bigH = h * factor;
+        var dst = new byte[bigW * bigH * 4];
+        for (var y = 0; y < bigH; y++)
+            for (var x = 0; x < bigW; x++)
+                Buffer.BlockCopy(src, ((y / factor) * w + x / factor) * 4, dst, (y * bigW + x) * 4, 4);
+
+        var big = BitmapSource.Create(bigW, bigH, 96, 96, PixelFormats.Bgra32, null, dst, bigW * 4);
+        big.Freeze();
+        return big;
     }
 
     private static bool IsFullyTransparent(BitmapSource source)

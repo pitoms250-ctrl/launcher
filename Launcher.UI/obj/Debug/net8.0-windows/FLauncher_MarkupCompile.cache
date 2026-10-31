@@ -1,5 +1,5 @@
 ﻿FLauncher
-
+1.0.0.0
 
 winexe
 C#
@@ -12,9 +12,9 @@ TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR
 C:\ML\src\Launcher.UI\App.xaml
 28242642518
 81393924707
-261745213361
+29-121570792
 2391070617736
 MainWindow.xaml;Themes\Animations.xaml;Themes\Colors.xaml;Themes\Controls\Buttons.xaml;Themes\Controls\Data.xaml;Themes\Controls\Feedback.xaml;Themes\Controls\Inputs.xaml;Themes\Effects.xaml;Themes\GreenTheme.xaml;Themes\Metrics.xaml;Themes\Typography.xaml;Views\LobbyView.xaml;Views\MicrosoftAuthDialog.xaml;Views\MicrosoftOAuthWindow.xaml;Views\ModsView.xaml;Views\NewsView.xaml;Views\OnlineView.xaml;Views\PathDialog.xaml;Views\PlayView.xaml;Views\ProfileView.xaml;Views\SettingsView.xaml;Views\ShopView.xaml;Views\SkinLobbyView.xaml;Views\SkinsView.xaml;Views\SupportWindow.xaml;Views\VersionsView.xaml;Views\WelcomeWindow.xaml;Views\ZbtGateOverlay.xaml;
 
-False
+True
 

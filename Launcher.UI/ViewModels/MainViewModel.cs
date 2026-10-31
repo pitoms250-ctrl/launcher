@@ -98,13 +98,14 @@ public partial class MainViewModel : ObservableObject
     public string SelectedVersionLabel => SelectedVersion is null ? "—" : SelectedVersion.Id;
 
     public MainViewModel(IVersionService versions, IJavaService java, ILaunchService launch, IAuthService auth,
-        IRealtimeDatabaseService realtimeDatabase, ICloudApiService cloud,
+        IRealtimeDatabaseService realtimeDatabase, ICloudApiService cloud, IShopService shop, IWalletService wallet,
         INewsService news, IServerService servers, IModService mods, ISkinService skins, TextTranslationService translation,
         SettingsStore store, LauncherPaths paths,
         IOptions<LauncherOptions> opt, ILogger<MainViewModel> log)
     {
         (_versions, _java, _launch, _auth, _realtimeDatabase, _cloud, _news, _servers, _mods, _skins, _translation, _store, _paths, _log) =
             (versions, java, launch, auth, realtimeDatabase, cloud, news, servers, mods, skins, translation, store, paths, log);
+        _shop = shop; _wallet = wallet;
         _requireZbt = opt.Value.RequireZbtKey;
 
         _settings = _store.Load();
@@ -113,6 +114,10 @@ public partial class MainViewModel : ObservableObject
         ShareDiagnostics = _settings.ShareDiagnostics;
         _wantedVersion = _settings.LastVersion; ModLoader = _settings.LastModLoader ?? "fabric";
         SkinInput = Nickname; GameFolder = _paths.Root; UpdateStats();
+        RefreshProfileState();
+        LoadProfilePhotoFromSettings();
+        _ = LoadPlayerSkinAsync();
+        InitSkinSync();
         if (string.IsNullOrWhiteSpace(_settings.InstallId))
         {
             _settings.InstallId = Guid.NewGuid().ToString("N");
@@ -134,9 +139,11 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private void Navigate(string page)
     {
-        if (IsZbtLocked) return;
+        if (IsZbtLocked || IsBanned) return;
         CurrentPage = page;
         if (page == "Mods") { RefreshMods(); if (ModResults.Count == 0) _ = SearchModsAsync(); }
+        else if (page == "Shop") { _ = LoadShopAsync(); _ = RefreshWalletAsync(); }
+        else if (page == "Profile") { RefreshProfileState(); _ = RefreshWalletAsync(); }
     }
 
     private async Task InitializeAsync()
@@ -145,6 +152,11 @@ public partial class MainViewModel : ObservableObject
         {
             _session = await _auth.TryRestoreAsync();
             UpdateAccountState();
+            if (HasFirebaseSession(_session))
+            {
+                StartBanWatch();
+                _ = RefreshWalletAsync();
+            }
             if (_requireZbt)
             {
                 IsZbtLocked = true;
@@ -229,10 +241,13 @@ public partial class MainViewModel : ObservableObject
         if (_session is not null)
         {
             _presenceTimer.Stop();
+            StopBanWatch(); StopWalletWatch(); StopShopWatch();
+            IsBanned = false; BanMessage = "";
             await _auth.SignOutAsync();
             if (ShareDiagnostics) await SetPresenceSafelyAsync("offline");
             _session = null;
             UpdateAccountState();
+            await RefreshWalletAsync();
             return;
         }
 
@@ -268,6 +283,7 @@ public partial class MainViewModel : ObservableObject
                         _session = await authTask;
                         UpdateAccountState();
                         dlg.SetSuccess("Добро пожаловать в F Launcher", _session.Username);
+                        await OnSignedInAsync();
 
                         await Task.WhenAny(closed.Task, Task.Delay(1800));
                         if (!closed.Task.IsCompleted) dlg.Close();
@@ -306,21 +322,29 @@ public partial class MainViewModel : ObservableObject
         AccountActionLabel = _session is null ? "Войти Microsoft" : "Выйти";
         AvatarLetter = _session?.Username[..1].ToUpperInvariant() ??
             (string.IsNullOrWhiteSpace(Nickname) ? "?" : Nickname[..1].ToUpperInvariant());
+        OnAccountChanged();   // профиль + скин в лобби (раньше этот метод нигде не вызывался)
     }
 
     private async Task StartCloudSessionAsync()
     {
-        if (!ShareDiagnostics || _session?.FirebaseUid is null) return;
+        if (!HasFirebaseSession(_session)) return;
         try
         {
-            _session = await _auth.RefreshFirebaseTokenAsync(_session);
+            _session = await _auth.RefreshFirebaseTokenAsync(_session!);
             var locale = GetLocale();
-            await _realtimeDatabase.RegisterPlayerAsync(_session, _session.Username, locale);
+            // Профиль игрока нужен для CRM, банов и ЗБТ — пишем всегда, а не только при включённой диагностике.
+            await _realtimeDatabase.RegisterPlayerAsync(_session, _session.Username, locale,
+                _settings.LaunchCount, _settings.TotalPlayMinutes, _settings.LastVersion);
+            if (!ShareDiagnostics) return;
             await _realtimeDatabase.SetPresenceAsync(_session, "online", "1.0.0");
             await _realtimeDatabase.RecordEventAsync(_session, "auth.login_success", "account", locale, "1.0.0");
             _presenceTimer.Start();
         }
-        catch (Exception ex) { _log.LogWarning(ex, "Не удалось синхронизировать профиль с Firebase"); }
+        catch (Exception ex)
+        {
+            _log.LogWarning(ex, "Не удалось синхронизировать профиль с Firebase");
+            ProfileActionMessage = LastLogLine = "Не удалось записать профиль в облако: " + ex.Message;
+        }
     }
 
     public async Task StopCloudSessionAsync()
@@ -528,7 +552,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     // ---------- запуск ----------
-    private bool CanPlay() => !IsBusy && SelectedVersion is not null;
+    private bool CanPlay() => !IsBusy && !IsBanned && SelectedVersion is not null;
 
     [RelayCommand(CanExecute = nameof(CanPlay))]
     private Task PlayAsync() => RunAsync(null, launch: true);
@@ -543,6 +567,7 @@ public partial class MainViewModel : ObservableObject
     private async Task RunAsync(ServerInfo? server, bool launch)
     {
         if (SelectedVersion is null) return;
+        if (await IsBannedNowAsync()) return;                  // бан мог прийти из CRM, пока лаунчер был открыт
         if (!EnsureGameFolder()) return;                       // «куда скачивать: C или D?»
         IsBusy = true;
         _cts = new CancellationTokenSource();

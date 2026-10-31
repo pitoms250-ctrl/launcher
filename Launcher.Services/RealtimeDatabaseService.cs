@@ -1,3 +1,4 @@
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Net;
@@ -269,7 +270,56 @@ public sealed class RealtimeDatabaseService : IRealtimeDatabaseService
             throw new HttpRequestException($"Не удалось проверить статус аккаунта (HTTP {(int)response.StatusCode}).");
 
         var body = await response.Content.ReadAsStringAsync(ct);
-        return !string.IsNullOrWhiteSpace(body) && !string.Equals(body.Trim(), "null", StringComparison.OrdinalIgnoreCase);
+        if (string.IsNullOrWhiteSpace(body) || string.Equals(body.Trim(), "null", StringComparison.OrdinalIgnoreCase)) return false;
+        return BanState.IsActive(JsonNode.Parse(body));
+    }
+
+    public async Task WatchBanAsync(AuthSession session, Action<bool, string?> onChanged, CancellationToken ct = default)
+    {
+        if (string.IsNullOrWhiteSpace(session.FirebaseUid) || string.IsNullOrWhiteSpace(session.FirebaseIdToken))
+            throw new InvalidOperationException("Для подписки на блокировку требуется Firebase-сессия.");
+
+        var banPath = $"bans/{session.FirebaseUid}";
+        using var request = new HttpRequestMessage(HttpMethod.Get, RtdbUrl(banPath, session));
+        request.Headers.Accept.ParseAdd("text/event-stream");
+        using var response = await _http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, ct);
+        if (!response.IsSuccessStatusCode)
+            throw new HttpRequestException($"Подписка на bans отклонена (HTTP {(int)response.StatusCode}). Проверьте правила RTDB для /bans/$uid.");
+
+        await using var stream = await response.Content.ReadAsStreamAsync(ct);
+        using var reader = new StreamReader(stream);
+        var eventName = "";
+        var eventData = new StringBuilder();
+        while (await reader.ReadLineAsync(ct) is { } line)
+        {
+            if (line.Length == 0)
+            {
+                if (eventName is "put" or "patch")
+                {
+                    var envelope = JsonNode.Parse(eventData.ToString());
+                    var path = envelope?["path"]?.ToString() ?? "/";
+                    JsonNode? current;
+                    if (eventName == "put" && path == "/") current = envelope?["data"];
+                    else current = await GetNodeAsync(banPath, session, ct); // вложенное изменение — перечитываем узел целиком
+                    onChanged(BanState.IsActive(current), BanState.Reason(current));
+                }
+                else if (eventName is "cancel" or "auth_revoked")
+                    throw new HttpRequestException("Подписка на bans закрыта (токен истёк или доступ отозван); требуется переподключение.");
+
+                eventName = "";
+                eventData.Clear();
+                continue;
+            }
+
+            if (line.StartsWith("event:", StringComparison.Ordinal))
+                eventName = line[6..].Trim();
+            else if (line.StartsWith("data:", StringComparison.Ordinal))
+            {
+                if (eventData.Length > 0) eventData.Append('\n');
+                eventData.Append(line[5..].TrimStart());
+            }
+        }
+        throw new IOException("Поток bans закрыт сервером.");
     }
 
     public Task SetPresenceAsync(AuthSession session, string state, string launcherVersion, string? gameVersion = null,
@@ -422,6 +472,28 @@ public sealed class RealtimeDatabaseService : IRealtimeDatabaseService
             ramBytes < 16L * 1024 * 1024 * 1024 ? "8-16GB" : "16GB+";
         return new DeviceSnapshot(RuntimeInformation.OSDescription, RuntimeInformation.ProcessArchitecture.ToString(), ramBucket,
             Environment.ProcessorCount);
+    }
+
+    /// <summary>Что считать активным баном: узел отсутствует — нет бана; false / active:false / revoked:true / истёкший expiresAt — тоже нет.</summary>
+    private static class BanState
+    {
+        public static bool IsActive(JsonNode? node)
+        {
+            if (node is null) return false;
+            if (node is JsonValue value)
+                return value.TryGetValue<bool>(out var flag) ? flag : !string.IsNullOrWhiteSpace(value.ToString());
+            if (node is JsonObject obj)
+            {
+                if (string.Equals(obj["active"]?.ToString(), "false", StringComparison.OrdinalIgnoreCase)) return false;
+                if (string.Equals(obj["revoked"]?.ToString(), "true", StringComparison.OrdinalIgnoreCase)) return false;
+                if (long.TryParse(obj["expiresAt"]?.ToString(), out var expiresAt) && expiresAt > 0 &&
+                    expiresAt < DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()) return false;
+            }
+            return true;
+        }
+
+        public static string? Reason(JsonNode? node) =>
+            node is JsonObject obj && obj["reason"]?.ToString() is { Length: > 0 } reason ? reason : null;
     }
 
     private sealed record DeviceSnapshot(string Os, string Architecture, string RamBucket, int LogicalProcessors);

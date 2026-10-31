@@ -31,7 +31,18 @@ public partial class SkinEditorViewModel : ObservableObject
     [ObservableProperty] private bool _slim;
     [ObservableProperty] private string _status = "";
 
+    /// <summary>Срабатывает после каждой перерисовки (мазок, заливка, отмена, загрузка) — лобби подхватывает новый скин.</summary>
+    public event Action? SkinChanged;
+
     public SkinEditorViewModel() => LoadDefault();
+
+    /// <summary>Текущий скин 64×64 как замороженный BitmapSource (для 3D-превью в лобби).</summary>
+    public BitmapSource ToBitmapSource()
+    {
+        var bmp = BitmapSource.Create(S, S, 96, 96, PixelFormats.Bgra32, null, (byte[])_px.Clone(), S * 4);
+        bmp.Freeze();
+        return bmp;
+    }
 
     partial void OnCurrentColorChanged(Color value) => Hex = $"#{value.R:X2}{value.G:X2}{value.B:X2}";
 
@@ -170,5 +181,6 @@ public partial class SkinEditorViewModel : ObservableObject
                 Array.Copy(_px, si, _prev, ((dy + j) * 40 + dx + i) * 4, 4);
             }
         Preview.WritePixels(new Int32Rect(0, 0, 40, 32), _prev, 40 * 4, 0);
+        SkinChanged?.Invoke();
     }
 }

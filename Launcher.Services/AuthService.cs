@@ -35,6 +35,9 @@ public sealed class AuthService : IAuthService
     /// <summary>Срабатывает, когда нужно что-то сделать на сайте. Лаунчер откроет страницу сам.</summary>
     public static event Action<AuthActionRequiredException>? ActionRequired;
 
+    /// <summary>Причина, по которой обмен Microsoft → Firebase не удался (null — всё хорошо). Нужна, чтобы UI показал ошибку, а не молчал.</summary>
+    public static string? LastFirebaseError { get; private set; }
+
     private readonly HttpClient _http;
     private readonly ITokenStore _store;
     private readonly IFirebaseGuestTokenStore _guestStore;
@@ -430,8 +433,12 @@ public sealed class AuthService : IAuthService
 
     private async Task<FirebaseAuthSession?> TryFirebaseSignInAsync(string? microsoftIdToken, CancellationToken ct)
     {
+        LastFirebaseError = null;
         if (string.IsNullOrWhiteSpace(_opt.FirebaseApiKey) || string.IsNullOrWhiteSpace(microsoftIdToken))
         {
+            LastFirebaseError = string.IsNullOrWhiteSpace(_opt.FirebaseApiKey)
+                ? "Не задан FirebaseApiKey."
+                : "Microsoft не вернул id_token (нужен scope openid).";
             _log.LogWarning("Firebase Microsoft exchange skipped. ApiKeyConfigured={ApiKeyConfigured}, MicrosoftIdTokenProvided={MicrosoftIdTokenProvided}",
                 !string.IsNullOrWhiteSpace(_opt.FirebaseApiKey), !string.IsNullOrWhiteSpace(microsoftIdToken));
             return null;
@@ -463,6 +470,7 @@ public sealed class AuthService : IAuthService
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
             _log.LogWarning(ex, "FirebaseAuth: Microsoft credential exchange failed. Cloud data will be unavailable for this Microsoft session.");
+            LastFirebaseError = ex.Message;
             return null;
         }
     }

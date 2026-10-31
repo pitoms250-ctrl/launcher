@@ -242,6 +242,20 @@
             </Grid>
             <v:ZbtGateOverlay Panel.ZIndex="200"
                               Visibility="{Binding IsZbtLocked, Converter={StaticResource BoolToVis}}"/>
+            <!-- Блокировка аккаунта из CRM: появляется мгновенно по подписке на RTDB bans/{uid} -->
+            <Grid Panel.ZIndex="300" Visibility="{Binding IsBanned, Converter={StaticResource BoolToVis}}">
+                <Border Background="#F2051210"/>
+                <Border Width="420" VerticalAlignment="Center" HorizontalAlignment="Center"
+                        CornerRadius="16" Background="#0C1A14" BorderBrush="#7F1D1D" BorderThickness="1" Padding="28">
+                    <StackPanel>
+                        <TextBlock Text="Аккаунт заблокирован" FontSize="22" FontWeight="Bold" Foreground="#FCA5A5"/>
+                        <TextBlock Margin="0,14,0,0" TextWrapping="Wrap" FontSize="13" Foreground="#E9F5EE"
+                                   Text="{Binding BanMessage}"/>
+                        <Button Margin="0,20,0,0" Style="{StaticResource PillButton}" Height="44"
+                                Command="{Binding ExitLauncherCommand}" Content="Закрыть лаунчер"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
         </Grid>
     </Border>
 </Window>

@@ -380,7 +380,7 @@ namespace Launcher.UI.Views {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/FLauncher;V1.0.0.0;component/views/microsoftauthdialog.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/FLauncher;component/views/microsoftauthdialog.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Views\MicrosoftAuthDialog.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
