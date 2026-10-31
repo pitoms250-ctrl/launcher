@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "lcFzP/UwVq4=",
+  "success": true,
+  "projectFilePath": "C:\\ML\\src\\Launcher.Infrastructure\\Launcher.Infrastructure.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\a6084\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.2\\microsoft.extensions.dependencyinjection.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\a6084\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.2\\microsoft.extensions.logging.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\a6084\\.nuget\\packages\\system.security.cryptography.protecteddata\\8.0.0\\system.security.cryptography.protecteddata.8.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

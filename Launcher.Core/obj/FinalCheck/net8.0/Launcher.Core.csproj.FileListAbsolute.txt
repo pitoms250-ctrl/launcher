@@ -1,0 +1,15 @@
+C:\ML\src\Launcher.Core\bin\FinalCheck\net8.0\Launcher.Core.deps.json
+C:\ML\src\Launcher.Core\bin\FinalCheck\net8.0\Launcher.Core.dll
+C:\ML\src\Launcher.Core\bin\FinalCheck\net8.0\Launcher.Core.pdb
+C:\ML\src\Launcher.Core\bin\FinalCheck\net8.0\Launcher.Shared.dll
+C:\ML\src\Launcher.Core\bin\FinalCheck\net8.0\Launcher.Shared.pdb
+C:\ML\src\Launcher.Core\obj\FinalCheck\net8.0\Launcher.Core.csproj.AssemblyReference.cache
+C:\ML\src\Launcher.Core\obj\FinalCheck\net8.0\Launcher.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\ML\src\Launcher.Core\obj\FinalCheck\net8.0\Launcher.Core.AssemblyInfoInputs.cache
+C:\ML\src\Launcher.Core\obj\FinalCheck\net8.0\Launcher.Core.AssemblyInfo.cs
+C:\ML\src\Launcher.Core\obj\FinalCheck\net8.0\Launcher.Core.csproj.CoreCompileInputs.cache
+C:\ML\src\Launcher.Core\obj\FinalCheck\net8.0\Launcher.42F54732.Up2Date
+C:\ML\src\Launcher.Core\obj\FinalCheck\net8.0\Launcher.Core.dll
+C:\ML\src\Launcher.Core\obj\FinalCheck\net8.0\refint\Launcher.Core.dll
+C:\ML\src\Launcher.Core\obj\FinalCheck\net8.0\Launcher.Core.pdb
+C:\ML\src\Launcher.Core\obj\FinalCheck\net8.0\ref\Launcher.Core.dll

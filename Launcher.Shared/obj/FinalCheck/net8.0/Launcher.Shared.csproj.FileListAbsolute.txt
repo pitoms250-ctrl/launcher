@@ -1,0 +1,11 @@
+C:\ML\src\Launcher.Shared\bin\FinalCheck\net8.0\Launcher.Shared.deps.json
+C:\ML\src\Launcher.Shared\bin\FinalCheck\net8.0\Launcher.Shared.dll
+C:\ML\src\Launcher.Shared\bin\FinalCheck\net8.0\Launcher.Shared.pdb
+C:\ML\src\Launcher.Shared\obj\FinalCheck\net8.0\Launcher.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\ML\src\Launcher.Shared\obj\FinalCheck\net8.0\Launcher.Shared.AssemblyInfoInputs.cache
+C:\ML\src\Launcher.Shared\obj\FinalCheck\net8.0\Launcher.Shared.AssemblyInfo.cs
+C:\ML\src\Launcher.Shared\obj\FinalCheck\net8.0\Launcher.Shared.csproj.CoreCompileInputs.cache
+C:\ML\src\Launcher.Shared\obj\FinalCheck\net8.0\Launcher.Shared.dll
+C:\ML\src\Launcher.Shared\obj\FinalCheck\net8.0\refint\Launcher.Shared.dll
+C:\ML\src\Launcher.Shared\obj\FinalCheck\net8.0\Launcher.Shared.pdb
+C:\ML\src\Launcher.Shared\obj\FinalCheck\net8.0\ref\Launcher.Shared.dll

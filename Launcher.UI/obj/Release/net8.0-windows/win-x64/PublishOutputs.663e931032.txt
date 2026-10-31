@@ -1,0 +1,11 @@
+C:\ML\build\spark-no-functions-final\FLauncher.pdb
+C:\ML\build\spark-no-functions-final\appsettings.json
+C:\ML\build\spark-no-functions-final\Fonts\JetBrainsMono-OFL.txt
+C:\ML\build\spark-no-functions-final\Fonts\Manrope-OFL.txt
+C:\ML\build\spark-no-functions-final\Fonts\Onest-OFL.txt
+C:\ML\build\spark-no-functions-final\Assets\welcome.mp3
+C:\ML\build\spark-no-functions-final\Launcher.Services.pdb
+C:\ML\build\spark-no-functions-final\Launcher.Infrastructure.pdb
+C:\ML\build\spark-no-functions-final\Launcher.Core.pdb
+C:\ML\build\spark-no-functions-final\Launcher.Shared.pdb
+C:\ML\build\spark-no-functions-final\FLauncher.exe

@@ -1,0 +1,17 @@
+C:\ML\src\Launcher.Services\bin\FinalCheck\net8.0\Launcher.Services.deps.json
+C:\ML\src\Launcher.Services\bin\FinalCheck\net8.0\Launcher.Services.dll
+C:\ML\src\Launcher.Services\bin\FinalCheck\net8.0\Launcher.Services.pdb
+C:\ML\src\Launcher.Services\bin\FinalCheck\net8.0\Launcher.Core.dll
+C:\ML\src\Launcher.Services\bin\FinalCheck\net8.0\Launcher.Shared.dll
+C:\ML\src\Launcher.Services\bin\FinalCheck\net8.0\Launcher.Core.pdb
+C:\ML\src\Launcher.Services\bin\FinalCheck\net8.0\Launcher.Shared.pdb
+C:\ML\src\Launcher.Services\obj\FinalCheck\net8.0\Launcher.Services.csproj.AssemblyReference.cache
+C:\ML\src\Launcher.Services\obj\FinalCheck\net8.0\Launcher.Services.GeneratedMSBuildEditorConfig.editorconfig
+C:\ML\src\Launcher.Services\obj\FinalCheck\net8.0\Launcher.Services.AssemblyInfoInputs.cache
+C:\ML\src\Launcher.Services\obj\FinalCheck\net8.0\Launcher.Services.AssemblyInfo.cs
+C:\ML\src\Launcher.Services\obj\FinalCheck\net8.0\Launcher.Services.csproj.CoreCompileInputs.cache
+C:\ML\src\Launcher.Services\obj\FinalCheck\net8.0\Launcher.55A70A90.Up2Date
+C:\ML\src\Launcher.Services\obj\FinalCheck\net8.0\Launcher.Services.dll
+C:\ML\src\Launcher.Services\obj\FinalCheck\net8.0\refint\Launcher.Services.dll
+C:\ML\src\Launcher.Services\obj\FinalCheck\net8.0\Launcher.Services.pdb
+C:\ML\src\Launcher.Services\obj\FinalCheck\net8.0\ref\Launcher.Services.dll

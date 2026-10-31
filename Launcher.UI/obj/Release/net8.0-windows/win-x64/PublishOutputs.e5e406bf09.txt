@@ -1,0 +1,11 @@
+C:\ML\build\rtdb-only-release\FLauncher.pdb
+C:\ML\build\rtdb-only-release\appsettings.json
+C:\ML\build\rtdb-only-release\Fonts\JetBrainsMono-OFL.txt
+C:\ML\build\rtdb-only-release\Fonts\Manrope-OFL.txt
+C:\ML\build\rtdb-only-release\Fonts\Onest-OFL.txt
+C:\ML\build\rtdb-only-release\Assets\welcome.mp3
+C:\ML\build\rtdb-only-release\Launcher.Services.pdb
+C:\ML\build\rtdb-only-release\Launcher.Infrastructure.pdb
+C:\ML\build\rtdb-only-release\Launcher.Core.pdb
+C:\ML\build\rtdb-only-release\Launcher.Shared.pdb
+C:\ML\build\rtdb-only-release\FLauncher.exe

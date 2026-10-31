@@ -1,0 +1,11 @@
+C:\ML\build\no-functions-release\FLauncher.pdb
+C:\ML\build\no-functions-release\appsettings.json
+C:\ML\build\no-functions-release\Fonts\JetBrainsMono-OFL.txt
+C:\ML\build\no-functions-release\Fonts\Manrope-OFL.txt
+C:\ML\build\no-functions-release\Fonts\Onest-OFL.txt
+C:\ML\build\no-functions-release\Assets\welcome.mp3
+C:\ML\build\no-functions-release\Launcher.Services.pdb
+C:\ML\build\no-functions-release\Launcher.Infrastructure.pdb
+C:\ML\build\no-functions-release\Launcher.Core.pdb
+C:\ML\build\no-functions-release\Launcher.Shared.pdb
+C:\ML\build\no-functions-release\FLauncher.exe

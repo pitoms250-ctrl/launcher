@@ -1,0 +1,11 @@
+C:\ML\build\repaired-output\FLauncher.pdb
+C:\ML\build\repaired-output\appsettings.json
+C:\ML\build\repaired-output\Fonts\JetBrainsMono-OFL.txt
+C:\ML\build\repaired-output\Fonts\Manrope-OFL.txt
+C:\ML\build\repaired-output\Fonts\Onest-OFL.txt
+C:\ML\build\repaired-output\Assets\welcome.mp3
+C:\ML\build\repaired-output\Launcher.Services.pdb
+C:\ML\build\repaired-output\Launcher.Infrastructure.pdb
+C:\ML\build\repaired-output\Launcher.Core.pdb
+C:\ML\build\repaired-output\Launcher.Shared.pdb
+C:\ML\build\repaired-output\FLauncher.exe

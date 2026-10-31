@@ -1,0 +1,11 @@
+C:\ML\build\spark-rtdb-final\FLauncher.pdb
+C:\ML\build\spark-rtdb-final\appsettings.json
+C:\ML\build\spark-rtdb-final\Fonts\JetBrainsMono-OFL.txt
+C:\ML\build\spark-rtdb-final\Fonts\Manrope-OFL.txt
+C:\ML\build\spark-rtdb-final\Fonts\Onest-OFL.txt
+C:\ML\build\spark-rtdb-final\Assets\welcome.mp3
+C:\ML\build\spark-rtdb-final\Launcher.Services.pdb
+C:\ML\build\spark-rtdb-final\Launcher.Infrastructure.pdb
+C:\ML\build\spark-rtdb-final\Launcher.Core.pdb
+C:\ML\build\spark-rtdb-final\Launcher.Shared.pdb
+C:\ML\build\spark-rtdb-final\FLauncher.exe

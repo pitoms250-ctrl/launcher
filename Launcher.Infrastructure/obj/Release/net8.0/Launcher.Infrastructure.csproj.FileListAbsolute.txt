@@ -1,0 +1,17 @@
+C:\ML\src\Launcher.Infrastructure\bin\Release\net8.0\Launcher.Infrastructure.deps.json
+C:\ML\src\Launcher.Infrastructure\bin\Release\net8.0\Launcher.Infrastructure.dll
+C:\ML\src\Launcher.Infrastructure\bin\Release\net8.0\Launcher.Infrastructure.pdb
+C:\ML\src\Launcher.Infrastructure\bin\Release\net8.0\Launcher.Core.dll
+C:\ML\src\Launcher.Infrastructure\bin\Release\net8.0\Launcher.Shared.dll
+C:\ML\src\Launcher.Infrastructure\bin\Release\net8.0\Launcher.Core.pdb
+C:\ML\src\Launcher.Infrastructure\bin\Release\net8.0\Launcher.Shared.pdb
+C:\ML\src\Launcher.Infrastructure\obj\Release\net8.0\Launcher.Infrastructure.csproj.AssemblyReference.cache
+C:\ML\src\Launcher.Infrastructure\obj\Release\net8.0\Launcher.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\ML\src\Launcher.Infrastructure\obj\Release\net8.0\Launcher.Infrastructure.AssemblyInfoInputs.cache
+C:\ML\src\Launcher.Infrastructure\obj\Release\net8.0\Launcher.Infrastructure.AssemblyInfo.cs
+C:\ML\src\Launcher.Infrastructure\obj\Release\net8.0\Launcher.Infrastructure.csproj.CoreCompileInputs.cache
+C:\ML\src\Launcher.Infrastructure\obj\Release\net8.0\Launcher.1CEF6910.Up2Date
+C:\ML\src\Launcher.Infrastructure\obj\Release\net8.0\Launcher.Infrastructure.dll
+C:\ML\src\Launcher.Infrastructure\obj\Release\net8.0\refint\Launcher.Infrastructure.dll
+C:\ML\src\Launcher.Infrastructure\obj\Release\net8.0\Launcher.Infrastructure.pdb
+C:\ML\src\Launcher.Infrastructure\obj\Release\net8.0\ref\Launcher.Infrastructure.dll
